@@ -1,0 +1,31 @@
+﻿steps:
+  
+- name: gcr.io/cloud-builders/gcloud
+  id: 'DecryptAppSettings'
+  args: 
+  - kms
+  - decrypt
+  - '--project=$PROJECT_ID'
+  - '--ciphertext-file=Google29581501/appsettings.dev.json.enc'
+  - '--plaintext-file=Google29581501/appsettings.json'
+  - '--location=europe-west1'
+  - '--keyring=CLOUDBUILD-SECRETS'
+  - '--key=CLOUDBUILD-KEY'
+
+- name: 'gcr.io/cloud-builders/dotnet'
+  id: 'publish'
+  args: [ 'publish', '-c', 'Release' ]
+
+- name: 'gcr.io/cloud-builders/gsutil'
+  id: 'CopyYAML'
+  args: [ 'cp', 'app.yaml', 'Google29581501/bin/Release/net5.0/publish/app.yaml' ]
+  waitFor: ['publish']
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'DeployService'
+  args: [ 'app', 'deploy', '--version', '${_VERSION}' ]
+  dir: './Google29581501/bin/Release/net5.0/publish'
+  waitFor: ['CopyYAML']
+
+timeout: 1800s
+
