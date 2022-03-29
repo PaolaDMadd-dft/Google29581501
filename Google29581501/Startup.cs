@@ -120,23 +120,23 @@ namespace Google29581501
             //app.UseGoogleTrace();
             //loggerFactory.AddGoogle(app.ApplicationServices, Configuration.GetSection("ProjectId").ToString());
             app.UseForwardedHeaders();
-            app.UseXContentTypeOptions();
-            app.UseReferrerPolicy(opts => opts.NoReferrer());
-            app.UseXXssProtection(options => options.EnabledWithBlockMode());
-            app.UseXfo(options => options.SameOrigin());
+            //app.UseXContentTypeOptions();
+            //app.UseReferrerPolicy(opts => opts.NoReferrer());
+            //app.UseXXssProtection(options => options.EnabledWithBlockMode());
+            //app.UseXfo(options => options.SameOrigin());
 
-            app.UseCsp(opts => opts
-            .BlockAllMixedContent()
-            .StyleSources(s => s.Self())
-            .StyleSources(s => s.UnsafeInline().CustomSources("https://rsms.me/inter/inter.css"))
-            .FontSources(s => s.Self().CustomSources("https://rsms.me/inter/font-files/"))
-            .FormActions(s => s.Self())
-            .FrameAncestors(s => s.Self())
-            .ImageSources(s => s.Self()
-            .CustomSources("https://www.googletagmanager.com", "https://www.google-analytics.com"))
-            .ScriptSources(s => s.Self())
-            .ScriptSources(s => s.UnsafeInline().CustomSources("https://www.googletagmanager.com", "https://www.google-analytics.com"))
-            );
+            //app.UseCsp(opts => opts
+            //.BlockAllMixedContent()
+            //.StyleSources(s => s.Self())
+            //.StyleSources(s => s.UnsafeInline().CustomSources("https://rsms.me/inter/inter.css"))
+            //.FontSources(s => s.Self().CustomSources("https://rsms.me/inter/font-files/"))
+            //.FormActions(s => s.Self())
+            //.FrameAncestors(s => s.Self())
+            //.ImageSources(s => s.Self()
+            //.CustomSources("https://www.googletagmanager.com", "https://www.google-analytics.com"))
+            //.ScriptSources(s => s.Self())
+            //.ScriptSources(s => s.UnsafeInline().CustomSources("https://www.googletagmanager.com", "https://www.google-analytics.com"))
+            //);
 
             app.Use(async (context, next) =>
             {
