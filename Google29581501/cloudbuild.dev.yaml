@@ -30,7 +30,7 @@
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   id: 'DeployService'
   entrypoint: 'gcloud'
-  args: ['app', 'deploy', '--image-url=gcr.io/$PROJECT_ID/google29581501:${_APP_ENV}']
+  args: ['app', 'deploy', '--image-url=gcr.io/$PROJECT_ID/google29581501:${_APP_ENV}', '--version', '${_VERSION}']
   waitFor: ['StoreImageAppEnv']
 
 timeout: 1800s
