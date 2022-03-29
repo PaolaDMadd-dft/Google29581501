@@ -1,6 +1,6 @@
 runtime: aspnetcore
 env: flex
-service: googleWpaola
+service: googlepaola
 
 
 automatic_scaling:
