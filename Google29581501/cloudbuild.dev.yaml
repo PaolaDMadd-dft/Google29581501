@@ -1,21 +1,21 @@
 ﻿steps:
 
-- name: gcr.io/cloud-builders/gcloud
-  id: 'DecryptAppSettings'
-  args: 
-  - kms
-  - decrypt
-  - '--project=$PROJECT_ID'
-  - '--ciphertext-file=Google29581501/appsettings.json.enc'
-  - '--plaintext-file=Google29581501/appsettings.json'
-  - '--location=europe-west1'
-  - '--keyring=CLOUDBUILD-SECRETS'
-  - '--key=CLOUDBUILD-KEY'
+#- name: gcr.io/cloud-builders/gcloud
+#  id: 'DecryptAppSettings'
+#  args: 
+#  - kms
+#  - decrypt
+#  - '--project=$PROJECT_ID'
+#  - '--ciphertext-file=Google29581501/appsettings.json.enc'
+#  - '--plaintext-file=Google29581501/appsettings.json'
+#  - '--location=europe-west1'
+#  - '--keyring=CLOUDBUILD-SECRETS'
+#  - '--key=CLOUDBUILD-KEY'
 
 - name: 'docker'
   id: 'BuildImage'
   args: ['build', '--no-cache', '-t', 'gcr.io/$PROJECT_ID/google29581501:$SHORT_SHA', '-t', 'gcr.io/$PROJECT_ID/google29581501:${_APP_ENV}', '-f', 'Google29581501/Dockerfile', '.']
-  waitFor: ['DecryptAppSettings']
+  waitFor: ['-']
 # Step:2a = Store image SHA
 - name: 'gcr.io/cloud-builders/docker'
   id: 'StoreImageSha'
