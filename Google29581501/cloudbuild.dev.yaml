@@ -12,20 +12,25 @@
   - '--keyring=CLOUDBUILD-SECRETS'
   - '--key=CLOUDBUILD-KEY'
 
-- name: 'gcr.io/cloud-builders/dotnet'
-  id: 'publish'
-  args: [ 'publish', '-c', 'Release' ]
-
-- name: 'gcr.io/cloud-builders/gsutil'
-  id: 'CopyYAML'
-  args: [ 'cp', 'app.yaml', 'Google29581501/bin/Release/net5.0/publish/app.yaml' ]
-  waitFor: ['publish']
-
-- name: 'gcr.io/cloud-builders/gcloud'
+- name: 'docker'
+  id: 'BuildImage'
+  args: ['build', '--no-cache', '-t', 'gcr.io/$PROJECT_ID/google29581501:$SHORT_SHA', '-t', 'gcr.io/$PROJECT_ID/google29581501:${_APP_ENV}', '-f', 'Google29581501/Dockerfile', '.']
+  waitFor: ['DecryptAppSettings']
+# Step:2a = Store image SHA
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'StoreImageSha'
+  args: ['push', 'gcr.io/$PROJECT_ID/google29581501:$SHORT_SHA']
+  waitFor: ['BuildImage']
+# Step:2b = Store image _APP_ENV
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'StoreImageAppEnv'
+  args: ['push', 'gcr.io/$PROJECT_ID/google29581501:${_APP_ENV}']
+  waitFor: ['BuildImage']
+# Step:3 = Deploy service
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   id: 'DeployService'
-  args: [ 'app', 'deploy', '--version', '${_VERSION}' ]
-  dir: './Google29581501/bin/Release/net5.0/publish'
-  waitFor: ['CopyYAML']
-
+  entrypoint: 'gcloud'
+  args: ['app', 'deploy', '--image-url=gcr.io/$PROJECT_ID/google29581501:${_APP_ENV}']
+  waitFor: ['StoreImageAppEnv']
 
 timeout: 1800s
