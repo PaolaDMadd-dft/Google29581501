@@ -6,7 +6,7 @@
   - kms
   - decrypt
   - '--project=$PROJECT_ID'
-  - '--ciphertext-file=Google29581501/appsettings.dev.json.enc'
+  - '--ciphertext-file=Google29581501/appsettings.json.enc'
   - '--plaintext-file=Google29581501/appsettings.json'
   - '--location=europe-west1'
   - '--keyring=CLOUDBUILD-SECRETS'
