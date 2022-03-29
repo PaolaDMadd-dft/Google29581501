@@ -1,5 +1,5 @@
 ﻿steps:
-  
+
 - name: gcr.io/cloud-builders/gcloud
   id: 'DecryptAppSettings'
   args: 
@@ -27,5 +27,5 @@
   dir: './Google29581501/bin/Release/net5.0/publish'
   waitFor: ['CopyYAML']
 
-timeout: 1800s
 
+timeout: 1800s
